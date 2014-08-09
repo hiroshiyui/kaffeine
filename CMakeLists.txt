@@ -1,14 +1,32 @@
 project(kaffeine)
 
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
+find_package(ECM 0.0.11 REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
-find_package(KDE4 REQUIRED)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings)
+include(FeatureSummary)
+
+include(ECMInstallIcons)
+include(ECMOptionalAddSubdirectory)
+
+find_package(Qt5 REQUIRED COMPONENTS Widgets Network Sql)
+find_package(KF5 REQUIRED COMPONENTS CoreAddons Solid KIO)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
+
+
+#find_package(KDE4 REQUIRED)
 find_package(X11 REQUIRED)
 find_package(VLC 1.2 REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${VLC_INCLUDE_DIRS}
                     ${X11_Xscreensaver_INCLUDE_PATH})
 add_definitions(${KDE4_DEFINITIONS})
+
+#used to make porting easier
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
 if(STRICT_BUILD)
   add_definitions(-Werror -Weverything -Wno-packed -Wno-padded -Wno-sign-conversion -Wno-unreachable-code
@@ -21,19 +39,20 @@ if(STRICT_BUILD)
                   -DQT_NO_URL_CAST_FROM_STRING -DQT_STRICT_ITERATORS)
 endif(STRICT_BUILD)
 
-check_include_files(${CMAKE_CURRENT_SOURCE_DIR}/include/frontend.h HAVE_DVB)
-
-if(NOT HAVE_DVB)
-  MESSAGE(STATUS "Disabled features:\nDVB  Digital television support for Linux\n")
-  set(HAVE_DVB 0)
-endif(NOT HAVE_DVB)
+# include(CheckIncludeFiles)
+# check_include_files(${CMAKE_CURRENT_SOURCE_DIR}/include/frontend.h HAVE_DVB)
+# 
+# if(NOT HAVE_DVB)
+#   MESSAGE(STATUS "Disabled features:\nDVB  Digital television support for Linux\n")
+#   set(HAVE_DVB 0)
+# endif(NOT HAVE_DVB)
 
 add_subdirectory(deviceactions)
 add_subdirectory(dtvdaemon)
 add_subdirectory(icons)
 add_subdirectory(profiles)
 add_subdirectory(src)
-macro_optional_add_subdirectory(po)
+ecm_optional_add_subdirectory(po)
 
 if(BUILD_TOOLS)
   add_subdirectory(tools)
