@@ -39,7 +39,7 @@ public:
 
 	void begin(const char *message)
 	{
-		mutex.lock();
+        //mutex.lock();
 
 		if (buffer.size() > (8176 - 1024)) {
 			buffer.remove(0, buffer.indexOf(QLatin1Char('\n'), 1023) + 1);
@@ -75,19 +75,19 @@ public:
 		buffer.append(QLatin1Char('\n'));
 		fprintf(stderr, "%s", QTextCodec::codecForLocale()->fromUnicode(
 			buffer.constData() + position, buffer.size() - position).constData());
-		mutex.unlock();
+        //mutex.unlock();
 	}
 
-	QMutex mutex;
+    //QMutex mutex;
 	QString buffer;
 	int position;
 };
 
 QString Log::getLog()
 {
-	if (data != NULL) {
-		QMutexLocker locker(&data->mutex);
-		return data->buffer;
+    if (data != NULL) {
+//        QMutexLocker locker(&data->mutex);
+        return data.load()->buffer;
 	}
 
 	return QString();
@@ -104,27 +104,27 @@ void Log::begin(const char *message)
 		}
 	}
 
-	data->begin(message);
+    data.load()->begin(message);
 }
 
 void Log::append(qint64 value)
 {
-	data->append(value);
+    data.load()->append(value);
 }
 
 void Log::append(quint64 value)
 {
-	data->append(value);
+    data.load()->append(value);
 }
 
 void Log::append(const QString &string)
 {
-	data->append(string);
+    data.load()->append(string);
 }
 
 void Log::end()
 {
-	data->end();
+    data.load()->end();
 }
 
-QBasicAtomicPointer<LogPrivate> Log::data = Q_BASIC_ATOMIC_INITIALIZER(0);
+QAtomicPointer<LogPrivate> Log::data;

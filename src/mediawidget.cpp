@@ -447,7 +447,7 @@ void MediaWidget::mediaSourceDestroyed(MediaSource *mediaSource)
 	}
 }
 
-void MediaWidget::play(const KUrl &url, const KUrl &subtitleUrl)
+void MediaWidget::play(const QUrl &url, const QUrl &subtitleUrl)
 {
 	// FIXME mem-leak
 	play(new MediaSourceUrl(url, subtitleUrl));
@@ -455,10 +455,10 @@ void MediaWidget::play(const KUrl &url, const KUrl &subtitleUrl)
 
 void MediaWidget::playAudioCd(const QString &device)
 {
-	KUrl devicePath;
+    QUrl devicePath;
 
 	if (!device.isEmpty()) {
-		devicePath = KUrl::fromLocalFile(device);
+        devicePath = QURl::fromLocalFile(device);
 	} else {
 		QList<Solid::Device> devices =
 			Solid::Device::listFromQuery(QLatin1String("OpticalDisc.availableContent & 'Audio'"));
@@ -467,7 +467,7 @@ void MediaWidget::playAudioCd(const QString &device)
 			Solid::Block *block = devices.first().as<Solid::Block>();
 
 			if (block != NULL) {
-				devicePath = KUrl::fromLocalFile(block->device());
+                devicePath = QURl::fromLocalFile(block->device());
 			}
 		}
 	}
@@ -478,10 +478,10 @@ void MediaWidget::playAudioCd(const QString &device)
 
 void MediaWidget::playVideoCd(const QString &device)
 {
-	KUrl devicePath;
+    QURl devicePath;
 
 	if (!device.isEmpty()) {
-		devicePath = KUrl::fromLocalFile(device);
+        devicePath = QURl::fromLocalFile(device);
 	} else {
 		QList<Solid::Device> devices = Solid::Device::listFromQuery(
 			QLatin1String("OpticalDisc.availableContent & 'VideoCd|SuperVideoCd'"));
@@ -490,7 +490,7 @@ void MediaWidget::playVideoCd(const QString &device)
 			Solid::Block *block = devices.first().as<Solid::Block>();
 
 			if (block != NULL) {
-				devicePath = KUrl::fromLocalFile(block->device());
+                devicePath = QURl::fromLocalFile(block->device());
 			}
 		}
 	}
@@ -501,10 +501,10 @@ void MediaWidget::playVideoCd(const QString &device)
 
 void MediaWidget::playDvd(const QString &device)
 {
-	KUrl devicePath;
+    QURl devicePath;
 
 	if (!device.isEmpty()) {
-		devicePath = KUrl::fromLocalFile(device);
+        devicePath = QURl::fromLocalFile(device);
 	} else {
 		QList<Solid::Device> devices =
 			Solid::Device::listFromQuery(QLatin1String("OpticalDisc.availableContent & 'VideoDvd'"));
@@ -513,7 +513,7 @@ void MediaWidget::playDvd(const QString &device)
 			Solid::Block *block = devices.first().as<Solid::Block>();
 
 			if (block != NULL) {
-				devicePath = KUrl::fromLocalFile(block->device());
+                devicePath = QURl::fromLocalFile(block->device());
 			}
 		}
 	}
@@ -1012,7 +1012,7 @@ void MediaWidget::dropEvent(QDropEvent *event)
 	const QMimeData *mimeData = event->mimeData();
 
 	if (mimeData->hasUrls()) {
-		emit playlistUrlsDropped(KUrl::List::fromMimeData(mimeData));
+        emit playlistUrlsDropped(QURl::List::fromMimeData(mimeData));
 		event->acceptProposedAction();
 	}
 }

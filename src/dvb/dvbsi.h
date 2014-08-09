@@ -174,8 +174,7 @@ private:
 		Gb2312		= 15,
 		Big5		= 16,
 		Utf_8		= 17,
-		Utf_16be  = 18,
-		EncodingTypeMax	= 18
+		EncodingTypeMax	= 17
 	};
 
 	static QTextCodec *codecTable[EncodingTypeMax + 1];

@@ -22,8 +22,8 @@
 #define MEDIAWIDGET_H
 
 #include <QWidget>
-#include <KIcon>
-#include <KUrl>
+#include <QIcon>
+#include <QUrl>
 
 class QActionGroup;
 class QPushButton;
@@ -95,7 +95,7 @@ public:
 	 */
 
 	void play(MediaSource *source_);
-	void play(const KUrl &url, const KUrl &subtitleUrl = KUrl());
+    void play(const QUrl &url, const QUrl &subtitleUrl = QUrl());
 	void playAudioCd(const QString &device);
 	void playVideoCd(const QString &device);
 	void playDvd(const QString &device);
@@ -145,7 +145,7 @@ signals:
 	void changeCaption(const QString &caption);
 	void resizeToVideo(MediaWidget::ResizeFactor resizeFactor);
 
-	void playlistUrlsDropped(const QList<KUrl> &urls);
+    void playlistUrlsDropped(const QList<QUrl> &urls);
 	void osdKeyPressed(int key);
 
 private slots:
@@ -186,8 +186,8 @@ private:
 	KAction *actionPlayPause;
 	QString textPlay;
 	QString textPause;
-	KIcon iconPlay;
-	KIcon iconPause;
+    QIcon iconPlay;
+    QIcon iconPause;
 	KAction *actionStop;
 	KAction *actionNext;
 	KAction *fullScreenAction;
@@ -198,8 +198,8 @@ private:
 	QStringListModel *subtitleModel;
 	QString textSubtitlesOff;
 	KAction *muteAction;
-	KIcon mutedIcon;
-	KIcon unmutedIcon;
+    QIcon mutedIcon;
+    QIcon unmutedIcon;
 	QSlider *volumeSlider;
 	SeekSlider *seekSlider;
 	KAction *longSkipBackwardAction;
@@ -235,7 +235,7 @@ public:
 
 	virtual ~MediaSource()
 	{
-		setMediaWidget(NULL);
+        setMediaWidget(NULL);
 	}
 
 	enum Type
@@ -248,7 +248,7 @@ public:
 	};
 
 	virtual Type getType() const { return Url; }
-	virtual KUrl getUrl() const { return KUrl(); }
+    virtual QUrl getUrl() const { return QUrl(); }
 	virtual bool hideCurrentTotalTime() const { return false; }
 	virtual bool overrideAudioStreams() const { return false; }
 	virtual bool overrideSubtitles() const { return false; }
@@ -268,9 +268,9 @@ public:
 	virtual void previous() { }
 	virtual void next() { }
 
-	void setMediaWidget(MediaWidget *mediaWidget)
+    void setMediaWidget(MediaWidget *mediaWidget)
 	{
-		MediaWidget *oldMediaWidget = weakMediaWidget.data();
+        MediaWidget *oldMediaWidget = weakMediaWidget.data();
 
 		if (mediaWidget != oldMediaWidget) {
 			if (oldMediaWidget != NULL) {
@@ -282,7 +282,7 @@ public:
 	}
 
 private:
-	QWeakPointer<MediaWidget> weakMediaWidget;
+    QWeakPointer<MediaWidget> weakMediaWidget;
 };
 
 #endif /* MEDIAWIDGET_H */
