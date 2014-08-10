@@ -22,7 +22,7 @@
 
 #include <QFile>
 #include <QVariant>
-#include <KStandardDirs>
+#include <QStandardPaths>
 #include "../ensurenopendingoperation.h"
 #include "../log.h"
 #include "dvbsi.h"
@@ -127,7 +127,7 @@ DvbChannelModel *DvbChannelModel::createSqlModel(QObject *parent)
 
 	// compatibility code
 
-	QFile file(KStandardDirs::locateLocal("appdata", QLatin1String("channels.dtv")));
+    QFile file(QStandardPaths::locate(QStandardPaths::DataLocation, QLatin1String("channels.dtv")));
 
 	if (!file.exists()) {
 		return channelModel;
