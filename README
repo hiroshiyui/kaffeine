@@ -1,10 +1,12 @@
+This is an experimental KF5/Qt5 port of kaffeine. Work is in progress, and may advance too slowly. Please try to fix the compile issues you are facing and lets collaborate to make Kaffeine KDE 5 ready.
+
 -------------------
 Installing Kaffeine
 -------------------
 
 The following development headers are needed (recommended versions):
-* Qt >= 4.6
-* KDE >= 4.4
+* Qt >= 5.0
+* KF >= 5.0
 * libX11
 * libXss
 
@@ -23,20 +25,20 @@ Useful options include:
 For further information look for generic KDE4 / cmake instructions.
 
 --------
-Homepage
+BUGS
 --------
 
-http://kaffeine.kde.org
+20140811:
+- won't compile due to QMap port issues:
+/abstractmediawidget.h:109:43: error: field 'metadata' has incomplete type
+  QMap<MediaWidget::MetadataType, QString> metadata;
 
 -------
 Authors
 -------
 
-Maintainer:
-  Christoph Pfister <christophpfister@gmail.com>
-
 Former maintainers:
+  Christoph Pfister <christophpfister@gmail.com>
   Christophe Thommeret
   Jürgen Kofler
-
 Thanks to various contributors, translators, testers ...
