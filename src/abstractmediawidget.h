@@ -22,6 +22,7 @@
 #define ABSTRACTMEDIAWIDGET_H
 
 #include "mediawidget.h"
+#include <QMap>
 
 class AbstractMediaWidget : public QWidget
 {
