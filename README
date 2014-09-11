@@ -22,16 +22,11 @@ Useful options include:
 * -DCMAKE_BUILD_TYPE=<type> (Debug or Release)
 * -DCMAKE_INSTALL_PREFIX=<path> (installation prefix for Kaffeine, e.g. /usr)
 
-For further information look for generic KDE4 / cmake instructions.
-
 --------
-BUGS
+DEV STATUS
 --------
 
-20140811:
-- won't compile due to QMap port issues:
-/abstractmediawidget.h:109:43: error: field 'metadata' has incomplete type
-  QMap<MediaWidget::MetadataType, QString> metadata;
+WiP
 
 -------
 Authors
