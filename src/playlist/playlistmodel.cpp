@@ -21,16 +21,16 @@
 #include "playlistmodel.h"
 
 #include <QDir>
-#include <QDomDocument>
+#include <QtXml/QDomDocument>
 #include <QMimeData>
 #include <QSet>
 #include <QTextStream>
 #include <QXmlStreamWriter>
-#include <KGlobal>
-#include <KLocale>
+#include <QLocale>
+#include <QUrl>
 #include "../log.h"
 
-bool Playlist::load(const KUrl &url_, Format format)
+bool Playlist::load(const QUrl &url_, Format format)
 {
 	url = url_;
 	title = url.fileName();
@@ -112,28 +112,28 @@ void Playlist::appendTrack(PlaylistTrack &track)
 	}
 }
 
-KUrl Playlist::fromFileOrUrl(const QString &fileOrUrl) const
+QUrl Playlist::fromFileOrUrl(const QString &fileOrUrl) const
 {
 	if (!QFileInfo(fileOrUrl).isRelative()) {
-		return KUrl::fromLocalFile(fileOrUrl);
+        return QUrl::fromLocalFile(fileOrUrl);
 	}
 
-	KUrl trackUrl(fileOrUrl);
+    QUrl trackUrl(fileOrUrl);
 
 	if (trackUrl.isRelative()) {
-		trackUrl = url.resolved(KUrl::fromLocalFile(fileOrUrl));
+        trackUrl = url.resolved(QUrl::fromLocalFile(fileOrUrl));
 
 		if (trackUrl.encodedPath() == url.encodedPath()) {
-			return KUrl();
+            return QUrl();
 		}
 	}
 
 	return trackUrl;
 }
 
-KUrl Playlist::fromRelativeUrl(const QString &trackUrlString) const
+QUrl Playlist::fromRelativeUrl(const QString &trackUrlString) const
 {
-	KUrl trackUrl(trackUrlString);
+    QUrl trackUrl(trackUrlString);
 
 	if (trackUrl.isRelative()) {
 		trackUrl = url.resolved(trackUrl);
@@ -142,7 +142,7 @@ KUrl Playlist::fromRelativeUrl(const QString &trackUrlString) const
 	return trackUrl;
 }
 
-QString Playlist::toFileOrUrl(const KUrl &trackUrl) const
+QString Playlist::toFileOrUrl(const QUrl &trackUrl) const
 {
 	QString localFile = trackUrl.toLocalFile();
 
@@ -161,7 +161,7 @@ QString Playlist::toFileOrUrl(const KUrl &trackUrl) const
 	}
 }
 
-QString Playlist::toRelativeUrl(const KUrl &trackUrl) const
+QString Playlist::toRelativeUrl(const QUrl &trackUrl) const
 {
 	if ((trackUrl.scheme() == url.scheme()) && (trackUrl.authority() == url.authority())) {
 		QByteArray playlistPath = url.encodedPath();
@@ -171,7 +171,7 @@ QString Playlist::toRelativeUrl(const KUrl &trackUrl) const
 
 		if (trackPath.startsWith(playlistPath)) {
 			trackPath.remove(0, index + 1);
-			KUrl relativeUrl;
+            QUrl relativeUrl;
 			relativeUrl.setEncodedPath(trackPath);
 			relativeUrl.setEncodedQuery(trackUrl.encodedQuery());
 			relativeUrl.setEncodedFragment(trackUrl.encodedFragment());
@@ -519,7 +519,7 @@ Playlist *PlaylistModel::getVisiblePlaylist() const
 	return visiblePlaylist;
 }
 
-void PlaylistModel::appendUrls(Playlist *playlist, const QList<KUrl> &urls, bool playImmediately)
+void PlaylistModel::appendUrls(Playlist *playlist, const QList<QUrl> &urls, bool playImmediately)
 {
 	insertUrls(playlist, playlist->tracks.size(), urls, playImmediately);
 }
@@ -645,12 +645,12 @@ void PlaylistModel::clearVisiblePlaylist()
 	reset();
 }
 
-void PlaylistModel::insertUrls(Playlist *playlist, int row, const QList<KUrl> &urls,
+void PlaylistModel::insertUrls(Playlist *playlist, int row, const QList<QUrl> &urls,
 	bool playImmediately)
 {
-	QList<KUrl> processedUrls;
+    QList<QUrl> processedUrls;
 
-	foreach (const KUrl &url, urls) {
+    foreach (const QUrl &url, urls) {
 		QString fileName = url.fileName();
 		Playlist::Format format = Playlist::Invalid;
 
@@ -689,7 +689,7 @@ void PlaylistModel::insertUrls(Playlist *playlist, int row, const QList<KUrl> &u
 
 			for (int i = 0; i < entries.size(); ++i) {
 				const QString &entry = entries.at(i);
-				processedUrls.append(KUrl::fromLocalFile(dir.filePath(entry)));
+                processedUrls.append(QUrl::fromLocalFile(dir.filePath(entry)));
 			}
 		} else {
 			processedUrls.append(url);
@@ -744,7 +744,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
 {
 	if (role == Qt::DecorationRole) {
 		if ((index.row() == visiblePlaylist->currentTrack) && (index.column() == 0)) {
-			return KIcon(QLatin1String("arrow-right"));
+            return QIcon::fromTheme(QLatin1String("arrow-right"));
 		}
 	} else if (role == Qt::DisplayRole) {
 		switch (index.column()) {
@@ -767,7 +767,7 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
 			QTime length = visiblePlaylist->at(index.row()).length;
 
 			if (length.isValid()) {
-				return KGlobal::locale()->formatTime(length, true, true);
+                return QLocale()->formatTime(length, true, true);
 			} else {
 				return QVariant();
 			}
@@ -783,15 +783,15 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
 	if ((orientation == Qt::Horizontal) && (role == Qt::DisplayRole)) {
 		switch (section) {
 		case 0:
-			return i18nc("playlist track", "Title");
+            return tr("Title", "playlist track");
 		case 1:
-			return i18nc("playlist track", "Artist");
+            return tr("Artist", "playlist track");
 		case 2:
-			return i18nc("playlist track", "Album");
+            return tr("Album", "playlist track");
 		case 3:
-			return i18nc("playlist track", "Track Number");
+            return tr("Track Number", "playlist track");
 		case 4:
-			return i18nc("playlist track", "Length");
+            return tr("Length", "playlist track");
 		}
 	}
 
@@ -975,7 +975,7 @@ bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action, i
 	}
 
 	if (data->hasUrls()) {
-		insertUrls(visiblePlaylist, row, KUrl::List::fromMimeData(data), false);
+        insertUrls(visiblePlaylist, row, QUrl::List::fromMimeData(data), false);
 		return true;
 	}
 

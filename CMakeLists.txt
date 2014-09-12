@@ -28,6 +28,7 @@ add_definitions(${KDE4_DEFINITIONS})
 #used to make porting easier
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 
+
 if(STRICT_BUILD)
   add_definitions(-Werror -Weverything -Wno-packed -Wno-padded -Wno-sign-conversion -Wno-unreachable-code
                   -Wno-weak-vtables -ferror-limit=5
