@@ -975,7 +975,7 @@ bool PlaylistModel::dropMimeData(const QMimeData *data, Qt::DropAction action, i
 	}
 
 	if (data->hasUrls()) {
-        insertUrls(visiblePlaylist, row, QUrl::List::fromMimeData(data), false);
+        insertUrls(visiblePlaylist, row, data->urls(), false);
 		return true;
 	}
 
