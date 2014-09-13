@@ -368,7 +368,7 @@ PlaylistTab::PlaylistTab(QMenu *menu, KActionCollection *collection, MediaWidget
 	mediaWidget(mediaWidget_)
 {
 	Playlist *temporaryPlaylist = new Playlist();
-	temporaryPlaylist->title = i18nc("playlist browser", "Temporary Playlist");
+    temporaryPlaylist->title = i18nc("playlist browser", "Temporary Playlist");
 
 	playlistModel = new PlaylistModel(temporaryPlaylist, this);
 	connect(playlistModel, SIGNAL(playTrack(Playlist*,int)),

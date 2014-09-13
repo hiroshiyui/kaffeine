@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8.12)
+
 project(kaffeine)
 
 find_package(ECM 0.0.11 REQUIRED NO_MODULE)
@@ -7,19 +9,16 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings)
 include(FeatureSummary)
-
 include(ECMInstallIcons)
 include(ECMOptionalAddSubdirectory)
 
 find_package(Qt5 REQUIRED COMPONENTS Widgets Network Sql)
 find_package(KF5 REQUIRED COMPONENTS CoreAddons Solid KIO)
-
-feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-
-#find_package(KDE4 REQUIRED)
 find_package(X11 REQUIRED)
 find_package(VLC 1.2 REQUIRED)
+find_package(KF5I18n REQUIRED)
+
+feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${VLC_INCLUDE_DIRS}
                     ${X11_Xscreensaver_INCLUDE_PATH})

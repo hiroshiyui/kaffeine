@@ -41,7 +41,7 @@ configure_file(config-kaffeine.h.cmake ${CMAKE_BINARY_DIR}/config-kaffeine.h)
 
 add_executable(kaffeine ${kaffeinedvb_SRCS} ${kaffeine_SRCS})
 target_link_libraries(kaffeine Qt5::Sql ${KDE4_KFILE_LIBS} KF5::KIOWidgets
-                      KF5::Solid ${X11_Xscreensaver_LIB} ${VLC_LIBRARY})
+                      KF5::Solid KF5::I18n ${X11_Xscreensaver_LIB} ${VLC_LIBRARY})
 install(TARGETS kaffeine ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES scanfile.dvb DESTINATION ${DATA_INSTALL_DIR}/kaffeine)
 install(PROGRAMS kaffeine.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
