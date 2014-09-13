@@ -767,7 +767,8 @@ QVariant PlaylistModel::data(const QModelIndex &index, int role) const
 			QTime length = visiblePlaylist->at(index.row()).length;
 
 			if (length.isValid()) {
-                return QLocale()->formatTime(length, true, true);
+// FIXME: not sure how to port the following: return KGlobal::locale()->formatTime(length, true, true)
+                return length.toString();
 			} else {
 				return QVariant();
 			}
