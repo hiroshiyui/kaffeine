@@ -257,7 +257,6 @@ QString DvbSiText::convertText(const char *data, int size)
 		case 0x0a: encoding = Iso8859_14; break;
 		case 0x0b: encoding = Iso8859_15; break;
 		case 0x13: encoding = Gb2312; break;
-		//case 0x14: encoding = Big5; break;
 		case 0x14: encoding = Utf_16be; break;
 		case 0x15: encoding = Utf_8; break;
 		case 0x10: {

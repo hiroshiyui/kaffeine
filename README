@@ -1,10 +1,12 @@
+This is an experimental KF5/Qt5 port of kaffeine. Work is in progress, and may advance too slowly. Please try to fix the compile issues you are facing and lets collaborate to make Kaffeine KDE 5 ready.
+
 -------------------
 Installing Kaffeine
 -------------------
 
 The following development headers are needed (recommended versions):
-* Qt >= 4.6
-* KDE >= 4.4
+* Qt >= 5.0
+* KF >= 5.0
 * libX11
 * libXss
 
@@ -20,23 +22,18 @@ Useful options include:
 * -DCMAKE_BUILD_TYPE=<type> (Debug or Release)
 * -DCMAKE_INSTALL_PREFIX=<path> (installation prefix for Kaffeine, e.g. /usr)
 
-For further information look for generic KDE4 / cmake instructions.
-
 --------
-Homepage
+DEV STATUS
 --------
 
-http://kaffeine.kde.org
+WiP
 
 -------
 Authors
 -------
 
-Maintainer:
-  Christoph Pfister <christophpfister@gmail.com>
-
 Former maintainers:
+  Christoph Pfister <christophpfister@gmail.com>
   Christophe Thommeret
   Jürgen Kofler
-
 Thanks to various contributors, translators, testers ...
