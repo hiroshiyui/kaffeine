@@ -19,7 +19,7 @@
  */
 
 #include <QPointer>
-#include <KAboutData>
+#include <K4AboutData>
 #include <KCmdLineArgs>
 #include <KUniqueApplication>
 #include "mainwindow.h"
@@ -63,9 +63,9 @@ int KaffeineApplication::newInstance()
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData("kaffeine", 0, ki18n("Kaffeine"), "1.3-git",
+	K4AboutData aboutData("kaffeine", 0, ki18n("Kaffeine"), "1.3-git",
 		ki18n("A media player for KDE with digital TV support."),
-		KAboutData::License_GPL_V2, ki18n("(C) 2007-2011 The Kaffeine Authors"),
+		K4AboutData::License_GPL_V2, ki18n("(C) 2007-2011 The Kaffeine Authors"),
 		KLocalizedString(), "http://kaffeine.kde.org");
 
 	aboutData.addAuthor(ki18n("Christoph Pfister"), ki18n("Maintainer"),

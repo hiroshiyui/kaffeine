@@ -12,8 +12,24 @@ include(FeatureSummary)
 include(ECMInstallIcons)
 include(ECMOptionalAddSubdirectory)
 
-find_package(Qt5 REQUIRED COMPONENTS Widgets Network Sql)
-find_package(KF5 REQUIRED COMPONENTS CoreAddons Solid KIO)
+find_package(Qt5 REQUIRED COMPONENTS Widgets Network Sql X11Extras)
+find_package(KF5 REQUIRED COMPONENTS 
+    CoreAddons
+    Solid
+    Config
+    ItemModels
+    WidgetsAddons
+    WindowSystem
+    ConfigWidgets
+    Config
+    DBusAddons
+    I18n
+    ConfigWidgets
+    TextWidgets
+    XmlGui
+    KIO
+    NewStuff
+    KDELibs4Support)
 find_package(X11 REQUIRED)
 find_package(VLC 1.2 REQUIRED)
 find_package(KF5I18n REQUIRED)
@@ -41,9 +57,9 @@ endif(STRICT_BUILD)
 
 # include(CheckIncludeFiles)
 # check_include_files(${CMAKE_CURRENT_SOURCE_DIR}/include/frontend.h HAVE_DVB)
-# 
+#
 # if(NOT HAVE_DVB)
-#   MESSAGE(STATUS "Disabled features:\nDVB  Digital television support for Linux\n")
+# MESSAGE(STATUS "Disabled features:\nDVB Digital television support for Linux\n")
   set(HAVE_DVB 0)
 # endif(NOT HAVE_DVB)
 

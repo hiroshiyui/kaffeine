@@ -56,7 +56,7 @@ DvbEpgDialog::DvbEpgDialog(DvbManager *manager_, QWidget *parent) : KDialog(pare
 	QBoxLayout *rightLayout = new QVBoxLayout();
 	QBoxLayout *boxLayout = new QHBoxLayout();
 
-	KAction *scheduleAction = new KAction(KIcon(QLatin1String("media-record")),
+	KAction *scheduleAction = new KAction(QIcon::fromTheme(QLatin1String("media-record")),
 		i18nc("@action:inmenu tv show", "Record Show"), this);
 	connect(scheduleAction, SIGNAL(triggered()), this, SLOT(scheduleProgram()));
 
@@ -144,8 +144,8 @@ void DvbEpgDialog::entryActivated(const QModelIndex &index)
 	QDateTime begin = entry->begin.toLocalTime();
 	QTime end = entry->begin.addSecs(QTime().secsTo(entry->duration)).toLocalTime().time();
 	text += i18nc("@info tv show start, end", "<font color=#800000>%1 - %2</font><br><br>",
-		KGlobal::locale()->formatDateTime(begin, KLocale::LongDate),
-		KGlobal::locale()->formatTime(end));
+		KLocale::global()->formatDateTime(begin, KLocale::LongDate),
+		KLocale::global()->formatTime(end));
 	text += entry->details;
 	contentLabel->setText(text);
 }
@@ -326,17 +326,17 @@ QVariant DvbEpgTableModel::data(const QModelIndex &index, int role) const
 		switch (role) {
 		case Qt::DecorationRole:
 			if ((index.column() == 2) && entry->recording.isValid()) {
-				return KIcon(QLatin1String("media-record"));
+				return QIcon::fromTheme(QLatin1String("media-record"));
 			}
 
 			break;
 		case Qt::DisplayRole:
 			switch (index.column()) {
 			case 0:
-				return KGlobal::locale()->formatDateTime(
+				return KLocale::global()->formatDateTime(
 					entry->begin.toLocalTime());
 			case 1:
-				return KGlobal::locale()->formatTime(entry->duration, false, true);
+				return KLocale::global()->formatTime(entry->duration, false, true);
 			case 2:
 				return entry->title;
 			case 3:
