@@ -45,8 +45,8 @@ bool SqlHelper::createInstance()
 	Q_ASSERT(instance == NULL);
 
 	if (!QSqlDatabase::isDriverAvailable(QLatin1String("QSQLITE"))) {
-		KMessageBox::queuedMessageBox(NULL, KMessageBox::Error,
-			i18nc("message box", "Please install the Qt SQLite plugin."));
+		/*KMessageBox::queuedMessageBox(NULL, KMessageBox::Error,
+			i18nc("message box", "Please install the Qt SQLite plugin."));*/
 		return false;
 	}
 
@@ -60,8 +60,8 @@ bool SqlHelper::createInstance()
 		}
 
 		details.append(instance->database.lastError().driverText());
-		KMessageBox::queuedDetailedError(NULL,
-			i18nc("message box", "Cannot open the SQLite database."), details);
+		/*KMessageBox::queuedDetailedError(NULL,
+			i18nc("message box", "Cannot open the SQLite database."), details);*/
 		delete instance;
 		instance = NULL;
 		return false;

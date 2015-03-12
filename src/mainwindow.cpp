@@ -29,12 +29,14 @@
 #include <KInputDialog>
 #include <kio/deletejob.h>
 #include <KMenu>
-#include <KMenuBar>
+#include <QMenuBar>
 #include <KRecentFilesAction>
 #include <KShortcutsDialog>
 #include <KStatusNotifierItem>
 #include <KTabBar>
 #include <KToolBar>
+#include <KSharedConfig>
+#include <KConfigGroup>
 #include "dvb/dvbtab.h"
 #include "playlist/playlisttab.h"
 #include "configuration.h"
@@ -68,7 +70,7 @@ public:
 private:
 	void activate() { }
 
-	QAbstractButton *addShortcut(const QString &name, const KIcon &icon, QWidget *parent);
+	QAbstractButton *addShortcut(const QString &name, const QIcon &icon, QWidget *parent);
 };
 
 StartTab::StartTab(MainWindow *mainWindow)
@@ -82,35 +84,35 @@ StartTab::StartTab(MainWindow *mainWindow)
 	gridLayout->setSpacing(15);
 
 	QAbstractButton *button =
-		addShortcut(i18n("&1 Play File"), KIcon(QLatin1String("video-x-generic")), this);
+		addShortcut(i18n("&1 Play File"), QIcon(QLatin1String("video-x-generic")), this);
 	button->setShortcut(Qt::Key_1);
 	connect(button, SIGNAL(clicked()), mainWindow, SLOT(open()));
 	gridLayout->addWidget(button, 0, 0);
 
-	button = addShortcut(i18n("&2 Play Audio CD"), KIcon(QLatin1String("media-optical-audio")), this);
+	button = addShortcut(i18n("&2 Play Audio CD"), QIcon(QLatin1String("media-optical-audio")), this);
 	button->setShortcut(Qt::Key_2);
 	connect(button, SIGNAL(clicked()), mainWindow, SLOT(openAudioCd()));
 	gridLayout->addWidget(button, 0, 1);
 
-	button = addShortcut(i18n("&3 Play Video CD"), KIcon(QLatin1String("media-optical")), this);
+	button = addShortcut(i18n("&3 Play Video CD"), QIcon(QLatin1String("media-optical")), this);
 	button->setShortcut(Qt::Key_3);
 	connect(button, SIGNAL(clicked()), mainWindow, SLOT(openVideoCd()));
 	gridLayout->addWidget(button, 0, 2);
 
-	button = addShortcut(i18n("&4 Play DVD"), KIcon(QLatin1String("media-optical")), this);
+	button = addShortcut(i18n("&4 Play DVD"), QIcon(QLatin1String("media-optical")), this);
 	button->setShortcut(Qt::Key_4);
 	connect(button, SIGNAL(clicked()), mainWindow, SLOT(openDvd()));
 	gridLayout->addWidget(button, 1, 0);
 
 #if HAVE_DVB == 1
-	button = addShortcut(i18n("&5 Digital TV"), KIcon(QLatin1String("video-television")), this);
+	button = addShortcut(i18n("&5 Digital TV"), QIcon(QLatin1String("video-television")), this);
 	button->setShortcut(Qt::Key_5);
 	connect(button, SIGNAL(clicked()), mainWindow, SLOT(playDvb()));
 	gridLayout->addWidget(button, 1, 1);
 #endif /* HAVE_DVB == 1 */
 }
 
-QAbstractButton *StartTab::addShortcut(const QString &name, const KIcon &icon, QWidget *parent)
+QAbstractButton *StartTab::addShortcut(const QString &name, const QIcon &icon, QWidget *parent)
 {
 	// QPushButton has visual problems with big icons
 	QToolButton *button = new QToolButton(parent);
@@ -149,40 +151,40 @@ MainWindow::MainWindow()
 {
 	// menu structure
 
-	KMenuBar *menuBar = KMainWindow::menuBar();
+	QMenuBar *menuBar = KMainWindow::menuBar();
 	collection = new KActionCollection(this);
 
 	KMenu *menu = new KMenu(i18n("&File"), this);
 	menuBar->addMenu(menu);
 
-	KAction *action = KStandardAction::open(this, SLOT(open()), collection);
+	QAction *action = KStandardAction::open(this, SLOT(open()), collection);
 	menu->addAction(collection->addAction(QLatin1String("file_open"), action));
 
-	action = new KAction(KIcon(QLatin1String("text-html")),
+	action = new QAction(QIcon(QLatin1String("text-html")),
 		i18nc("@action:inmenu", "Open URL..."), collection);
 	action->setShortcut(Qt::CTRL | Qt::Key_U);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(openUrl()));
 	menu->addAction(collection->addAction(QLatin1String("file_open_url"), action));
 
-	actionOpenRecent = KStandardAction::openRecent(this, SLOT(openUrl(KUrl)), collection);
-	actionOpenRecent->loadEntries(KGlobal::config()->group("Recent Files"));
+	actionOpenRecent = KStandardAction::openRecent(this, SLOT(openUrl(QUrl)), collection);
+	actionOpenRecent->loadEntries(KSharedConfig::openConfig()->group("Recent Files"));
 	menu->addAction(collection->addAction(QLatin1String("file_open_recent"), actionOpenRecent));
 
 	menu->addSeparator();
 
-	action = new KAction(KIcon(QLatin1String("media-optical-audio")), i18n("Play Audio CD"), collection);
+	action = new QAction(QIcon(QLatin1String("media-optical-audio")), i18n("Play Audio CD"), collection);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(openAudioCd()));
 	menu->addAction(collection->addAction(QLatin1String("file_play_audiocd"), action));
 
-	action = new KAction(KIcon(QLatin1String("media-optical")), i18n("Play Video CD"), collection);
+	action = new QAction(QIcon(QLatin1String("media-optical")), i18n("Play Video CD"), collection);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(openVideoCd()));
 	menu->addAction(collection->addAction(QLatin1String("file_play_videocd"), action));
 
-	action = new KAction(KIcon(QLatin1String("media-optical")), i18n("Play DVD"), collection);
+	action = new QAction(QIcon(QLatin1String("media-optical")), i18n("Play DVD"), collection);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(openDvd()));
 	menu->addAction(collection->addAction(QLatin1String("file_play_dvd"), action));
 
-	action = new KAction(KIcon(QLatin1String("media-optical")), i18nc("@action:inmenu", "Play DVD Folder"),
+	action = new QAction(QIcon(QLatin1String("media-optical")), i18nc("@action:inmenu", "Play DVD Folder"),
 		collection);
 	connect(action, SIGNAL(triggered()), this, SLOT(playDvdFolder()));
 	menu->addAction(collection->addAction(QLatin1String("file_play_dvd_folder"), action));
@@ -222,11 +224,11 @@ MainWindow::MainWindow()
 		this, SLOT(navigationBarOrientationChanged(Qt::Orientation)));
 
 	tabBar = new KTabBar(navigationBar);
-	tabBar->addTab(KIcon(QLatin1String("start-here-kde")), i18n("Start"));
-	tabBar->addTab(KIcon(QLatin1String("kaffeine")), i18n("Playback"));
-	tabBar->addTab(KIcon(QLatin1String("view-media-playlist")), i18n("Playlist"));
+	tabBar->addTab(QIcon(QLatin1String("start-here-kde")), i18n("Start"));
+	tabBar->addTab(QIcon(QLatin1String("kaffeine")), i18n("Playback"));
+	tabBar->addTab(QIcon(QLatin1String("view-media-playlist")), i18n("Playlist"));
 #if HAVE_DVB == 1
-	tabBar->addTab(KIcon(QLatin1String("video-television")), i18n("Television"));
+	tabBar->addTab(QIcon(QLatin1String("video-television")), i18n("Television"));
 #endif /* HAVE_DVB == 1 */
 	tabBar->setShape(KTabBar::RoundedWest);
 	tabBar->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
@@ -335,7 +337,7 @@ MainWindow::MainWindow()
 		mediaWidget->setDisplayMode(MediaWidget::FullScreenMode);
 		break;
 	case Configuration::StartupRememberLastSetting: {
-		int value = KGlobal::config()->group("MainWindow").readEntry("DisplayMode", 0);
+		int value = KSharedConfig::openConfig()->group("MainWindow").readEntry("DisplayMode", 0);
 
 		switch (value) {
 		case 0:
@@ -356,7 +358,7 @@ MainWindow::MainWindow()
 
 MainWindow::~MainWindow()
 {
-	actionOpenRecent->saveEntries(KGlobal::config()->group("Recent Files"));
+	actionOpenRecent->saveEntries(KSharedConfig::openConfig()->group("Recent Files"));
 
 	if (!temporaryUrls.isEmpty()) {
 		KIO::del(temporaryUrls);
@@ -371,7 +373,7 @@ MainWindow::~MainWindow()
 	case MediaWidget::FullScreenReturnToMinimalMode: value = 2; break;
 	}
 
-	KGlobal::config()->group("MainWindow").writeEntry("DisplayMode", value);
+	KSharedConfig::openConfig()->group("MainWindow").writeEntry("DisplayMode", value);
 }
 
 KCmdLineOptions MainWindow::cmdLineOptions()
@@ -466,10 +468,10 @@ void MainWindow::parseArgs()
 #endif /* HAVE_DVB == 1 */
 
 	if (args->count() > 0) {
-		QList<KUrl> urls;
+		QList<QUrl> urls;
 
 		for (int i = 0; i < args->count(); ++i) {
-			KUrl url = args->url(i);
+			QUrl url = args->url(i);
 
 			if (url.isValid()) {
 				urls.append(url);
@@ -533,7 +535,7 @@ void MainWindow::displayModeChanged()
 
 void MainWindow::open()
 {
-	QList<KUrl> urls = KFileDialog::getOpenUrls(KUrl(), MediaWidget::extensionFilter(), this);
+	QList<QUrl> urls = KFileDialog::getOpenUrls(QUrl(), MediaWidget::extensionFilter(), this);
 
 	if (urls.size() >= 2) {
 		activateTab(PlaylistTabId);
@@ -548,21 +550,21 @@ void MainWindow::openUrl()
 	openUrl(KInputDialog::getText(i18nc("@title:window", "Open URL"), i18n("Enter a URL:")));
 }
 
-void MainWindow::openUrl(const KUrl &url)
+void MainWindow::openUrl(const QUrl &url)
 {
 	if (!url.isValid()) {
 		return;
 	}
 
 	// we need to copy "url" because addUrl() may invalidate it
-	KUrl copy(url);
+	QUrl copy(url);
 	actionOpenRecent->addUrl(copy); // moves the url to the top of the list
 
 	if (currentTabIndex != PlaylistTabId) {
 		activateTab(PlayerTabId);
 	}
 
-	playlistTab->appendToVisiblePlaylist(QList<KUrl>() << copy, true);
+	playlistTab->appendToVisiblePlaylist(QList<QUrl>() << copy, true);
 }
 
 void MainWindow::openAudioCd(const QString &device)
@@ -585,7 +587,7 @@ void MainWindow::openDvd(const QString &device)
 
 void MainWindow::playDvdFolder()
 {
-	QString folder = KFileDialog::getExistingDirectory(KUrl(), this);
+	QString folder = KFileDialog::getExistingDirectory(QUrl(), this);
 
 	if (!folder.isEmpty()) {
 		openDvd(folder);
@@ -631,7 +633,7 @@ void MainWindow::configureKeys()
 
 void MainWindow::configureKaffeine()
 {
-	KDialog *dialog = new ConfigurationDialog(this);
+	QDialog *dialog = new ConfigurationDialog(this);
 	dialog->setAttribute(Qt::WA_DeleteOnClose, true);
 	dialog->setModal(true);
 	dialog->show();

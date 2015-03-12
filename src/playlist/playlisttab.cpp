@@ -28,9 +28,12 @@
 #include <QToolButton>
 #include <QAction>
 #include <QFileDialog>
-#include <kfilewidget.h>
 #include <QMenu>
 #include <QStandardPaths>
+
+#include <KLocalizedString>
+#include <KActionCollection>
+#include <KStandardAction>
 
 #include "../log.h"
 #include "playlistmodel.h"
@@ -395,7 +398,7 @@ PlaylistTab::PlaylistTab(QMenu *menu, KActionCollection *collection, MediaWidget
 	repeatAction = new QAction(QIcon::fromTheme(QLatin1String("media-playlist-repeat")),
 		i18nc("playlist menu", "Repeat"), this);
 	repeatAction->setCheckable(true);
-	menu->addAction(collection->addAction(QLatin1String("playlist_repeat"), repeatAction));
+	menu->addAction(collection->addAction(QLatin1String("playlist_repeat"),repeatAction));
 
 	randomAction = new QAction(QIcon::fromTheme(QLatin1String("media-playlist-shuffle")),
 		i18nc("playlist menu", "Random"), this);
@@ -615,9 +618,10 @@ bool PlaylistTab::getRepeat() const
 
 void PlaylistTab::createFileWidget()
 {
-	KFileWidget *fileWidget = new KFileWidget(QUrl(), fileWidgetSplitter);
-	fileWidget->setFilter(MediaWidget::extensionFilter());
-	fileWidget->setMode(KFile::Files | KFile::ExistingOnly);
+	QFileDialog *fileWidget = new QFileDialog(fileWidgetSplitter);
+	fileWidget->setDirectoryUrl(QUrl());
+	fileWidget->setNameFilter(MediaWidget::extensionFilter());
+	fileWidget->setFileMode(QFileDialog::ExistingFiles);
 	fileWidgetSplitter->setStretchFactor(1, 1);
 
 	// KFileWidget creates a KUrlComboBox without layout (!), which steals the focus:
@@ -677,8 +681,7 @@ void PlaylistTab::addSubtitle()
 
 	int row = selectedRows.at(0).row();
 	Playlist *playlist = playlistModel->getVisiblePlaylist();
-    QList<QUrl> urls = QFileDialog::getOpenUrls(QUrl(), subtitleExtensionFilter(), this);
-
+    QList<QUrl> urls = QFileDialog::getOpenFileUrls(this, "", QUrl(), subtitleExtensionFilter());
 	if ((row < playlist->tracks.size()) && !urls.isEmpty()) {
 		PlaylistTrack &track = playlist->tracks[row];
 		track.subtitles += urls;
@@ -851,8 +854,8 @@ void PlaylistTab::savePlaylist(bool askName)
 
 	if (askName || !url.isValid() ||
 	    url.fileName().endsWith(QLatin1String(".kaffeine"), Qt::CaseInsensitive)) {
-        url = QFileDialog::getSaveUrl(QUrl(), i18nc("file filter",
-			"*.xspf|XSPF Playlist\n*.m3u|M3U Playlist\n*.pls|PLS Playlist"), this);
+        url = QFileDialog::getSaveFileUrl(this, "", QUrl(), i18nc("file filter",
+			"*.xspf|XSPF Playlist\n*.m3u|M3U Playlist\n*.pls|PLS Playlist"));
 
 		if (!url.isValid()) {
 			return;

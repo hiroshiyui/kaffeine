@@ -21,7 +21,7 @@
 #include "dbusobjects.h"
 
 #include <QDBusMetaType>
-#include <KAboutData>
+#include <K4AboutData>
 #include <KApplication>
 #include "dvb/dvbmanager.h"
 #include "dvb/dvbtab.h"
@@ -91,7 +91,7 @@ MprisRootObject::~MprisRootObject()
 
 QString MprisRootObject::Identity()
 {
-	const KAboutData *aboutData = KGlobal::mainComponent().aboutData();
+	const K4AboutData *aboutData = KComponentData::mainComponent().aboutData();
 	return aboutData->programName() + QLatin1Char(' ' )+ aboutData->version();
 }
 
@@ -296,7 +296,7 @@ int MprisTrackListObject::GetLength()
 
 int MprisTrackListObject::AddTrack(const QString &url, bool playImmediately)
 {
-	playlistTab->appendToCurrentPlaylist(QList<KUrl>() << url, playImmediately);
+	playlistTab->appendToCurrentPlaylist(QList<QUrl>() << url, playImmediately);
 	return 0;
 }
 

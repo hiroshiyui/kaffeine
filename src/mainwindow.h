@@ -50,7 +50,7 @@ private slots:
 	void displayModeChanged();
 	void open();
 	void openUrl();
-	void openUrl(const KUrl &url);
+	void openUrl(const QUrl &url);
 	void openAudioCd(const QString &device = QString());
 	void openVideoCd(const QString &device = QString());
 	void openDvd(const QString &device = QString());
@@ -83,7 +83,7 @@ private:
 	KToolBar *controlBar;
 	bool autoHideControlBar;
 	QTimer *cursorHideTimer;
-	QList<KUrl> temporaryUrls;
+	QList<QUrl> temporaryUrls;
 
 	MediaWidget *mediaWidget;
 	QStackedLayout *stackedLayout;
